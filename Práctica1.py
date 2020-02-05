@@ -1,37 +1,120 @@
 # -*- coding: utf-8 -*-
-"""
+'''
 Práctica 1
 
 Rubén Ruperto Díaz y Rafael Herrera Troca
-"""
+'''
 
+import numpy as np
+import matplotlib.pyplot as plt
 
+# Función logística f utilizada para construir el sistema dinámico
 def f(x):
     return r*x*(1-x);
 
+# Cálculo del término x_n = f^n(x_0)
 def fn(x0,fun,n):
     x = x0;
     for i in range(n):
         x = fun(x);
     return x;
 
+# Cálculo de la órbita con "long" elementos para con una función y un x_0 dados
 def orb(x0,fun,long):
     o = [x0];
     for i in range(long):
         o.append(fun(o[-1]));
     return o;
 
+# Cálculo del límite de una sucesión teniendo en cuenta los últimos "rango" términos
+# y para un cierto épsilon
 def limite(suc,eps,rango):
-    last = suc[-1*(range(rango)+1)];
-    # Nos hemos quedado aqui
+    last = suc[-1:-1*rango-1:-1];
+    lim = [last[0]];
+    per = 1;
+    while per < rango and abs(last[0] - last[per]) >= eps:
+        lim.append(last[per]);
+        per = per+1;
+    return lim;
 
-# Calculamos la órbita parcial para r = r
+# Compara si dos conjuntos son iguales con un error de un cierto epsilon dado
+def iguales(c1, c2, eps):
+    c1.sort();
+    c2.sort();
+    if len(c1) != len(c2):
+        return False;
+    else:
+        for i in range(len(c1)):
+            if abs(c1[i] - c2[i]) >= eps:
+                return False;
+        return True;
     
-r = 3.1,
-x0 = 0;
-orb_n = orb(x0,f,200);
 
-#ploteamos la orbita para ser guays
+# Calculamos la órbita parcial para un cierto conjunto de r y distintos x_0.
+# Para r en {3, 3.1, 3.2, 3.3, 3.4, 3.5} y tal que sólo tiene una cifra decimal, 
+# dibujamos las gráficas para los primeros 50 elementos de la órbita.
+# Una vez calculada cada órbita, hacemos el límite para cada x_0 para obtener 
+# los conjuntos atractores V_0 y comprobamos si son o no conjuntos atractores
+# según el valor del periodo que tengan y, en caso de que lo sean, 
+# que coinciden para los distintos valores de x_0. 
+# Finalmente, almacenamos V_0 para cada r.
 
-# Calculamos V0
+epsilon = 10**(-5)
+x0 = [0.25, 0.5, 0.75];
+rValues = np.arange(0.1,4,0.01);
+V0 = [];
+for r in rValues:
+    r = round(r,2);
+    # Cálculo de la órbita
+    orb_r = [orb(x,f,10000) for x in x0];
+    # Representación de la órbita (si procede)
+    if r >= 3 and r <= 3.5 and r == round(r,1):
+        plt.figure(figsize=(10,10));
+        plt.plot(orb_r[0][:100], 'r', label="$x_0 = 0.25$");
+        plt.plot(orb_r[1][:100], 'g', label="$x_0 = 0.5$");
+        plt.plot(orb_r[2][:100], 'b', label="$x_0 = 0.75$");
+        plt.title("Órbita en intervalo [0-50] para $r = $" + str(r));
+        plt.gca().set_ylim([0,1]);
+        plt.legend(loc="lower right");
+        plt.show();
+    # Cálculo de los conjuntos atractores y su periodo
+    V0_r = [limite(orbi,epsilon,100) for orbi in orb_r];
+    # Si el periodo es igual a los 100 elementos que hemos consultado, consideramos
+    # que no hay conjunto atractor
+    if len(V0_r[0]) == 100:
+        print("Para r =", r, " no existe conjunto atractor.");
+    # Si hay un periodo menor, comprobamos que los conjuntos atractores para cada
+    # x_0 coinciden (con diferencia menor que epsilon) y lo mostramos
+    else:
+        for i in range(len(V0_r)-1):
+            if not iguales(V0_r[i], V0_r[i+1], epsilon):
+                print("Para r =", r, ", los conjuntos atractores para x0 =", x0[i],
+                      "y x0 =", x0[i+1], "difieren en más de", epsilon);
+        print("Para r =", r, " el conjunto atractor es V0 =", V0_r[0]);
+    # Guardamos el conjunto V_0 obtenido (sea o no atractor)
+    V0.append(V0_r[0]);
+        
+    
+# Una vez tenemos todos los conjuntos V_0 para cada valor, los representamos
+# en una gráfica en función de r.
+V0_ = [];
+r_ = [];
+for i in range(len(V0)):
+    for j in range(len(V0[i])):
+        V0_.append(V0[i][j]);
+        r_.append(rValues[i]);
+plt.figure(figsize=(10,10));
+plt.scatter(r_, V0_, s=0.5);
+plt.title("Valores en $V_0$ en funcion de $r$");
+plt.xlabel("Valor de $r$");
+plt.ylabel("Valores en $V_0$");
+plt.show();
+
+# Calculamos el menor r de los que hemos considerado para el cual el conjunto atractor
+# tiene 8 elementos.
+i = 0;
+while len(V0[i]) < 8:
+    i = i + 1;
+print("El menor r de los considerados tal que V0 tiene 8 elementos es " + str(round(rValues[i],2)) + ".");
+print("El conjunto atractor correspondiente a dicha r es:", V0[i]);
 
