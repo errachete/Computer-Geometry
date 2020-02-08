@@ -51,7 +51,7 @@ def iguales(c1, c2, eps):
     
 
 # Calculamos la órbita parcial para un cierto conjunto de r y distintos x_0.
-# Para r en {3, 3.1, 3.2, 3.3, 3.4, 3.5} y tal que sólo tiene una cifra decimal, 
+# Para r en {3, 3.1, 3.2, 3.3, 3.4, 3.5}, 
 # dibujamos las gráficas para los primeros 50 elementos de la órbita.
 # Una vez calculada cada órbita, hacemos el límite para cada x_0 para obtener 
 # los conjuntos atractores V_0 y comprobamos si son o no conjuntos atractores
@@ -113,7 +113,7 @@ plt.show();
 # Calculamos el menor r de los que hemos considerado para el cual el conjunto atractor
 # tiene 8 elementos.
 i = 0;
-while len(V0[i]) < 8:
+while len(V0[i]) != 8:
     i = i + 1;
 print("El menor r de los considerados tal que V0 tiene 8 elementos es " + str(round(rValues[i],2)) + ".");
 print("El conjunto atractor correspondiente a dicha r es:", V0[i]);
