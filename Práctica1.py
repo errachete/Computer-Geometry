@@ -83,9 +83,9 @@ for r in rValues:
     # Representación de la órbita (si procede)
     if r >= 3 and r <= 3.5 and r == round(r,1):
         plt.figure(figsize=(10,10))
-        plt.plot(orb_r[0][:100], 'r', label="$x_0 = 0.25$")
-        plt.plot(orb_r[1][:100], 'g', label="$x_0 = 0.5$")
-        plt.plot(orb_r[2][:100], 'b', label="$x_0 = 0.75$")
+        plt.plot(orb_r[0][:50], 'r', label="$x_0 = 0.25$")
+        plt.plot(orb_r[1][:50], 'g', label="$x_0 = 0.5$")
+        plt.plot(orb_r[2][:50], 'b', label="$x_0 = 0.75$")
         plt.title("Órbita en intervalo [0-50] para $r = $" + str(r))
         plt.gca().set_ylim([0,1])
         plt.legend(loc="lower right")
