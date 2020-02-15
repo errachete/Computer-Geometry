@@ -172,6 +172,8 @@ print("Su longitud es", str(len(cod_es)) + ", mientras que con la codificación 
 
 # Decodificamos la palabra 1010100001111011111100 haciendo uso del árbol de
 # Huffman obtenido a partir del texto en inglés
+# También decodificamos los códigos obtenidos al codificar 'fractal' y se vuelve
+# a obtener esta palabra
 word = decode('1010100001111011111100', tree_en)
 word_en = decode(cod_en, tree_en)
 word_es = decode(cod_es, tree_es)
