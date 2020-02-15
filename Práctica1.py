@@ -29,8 +29,8 @@ def orb(x0,r,fun,long):
         o.append(fun(o[-1],r))
     return o
 
-# Cálculo del límite de una sucesión teniendo en cuenta los últimos "rango" términos
-# y para un cierto épsilon
+# Cálculo del límite de una sucesión teniendo en cuenta los últimos "rango" 
+# términos y para un cierto épsilon
 def limite(suc,eps,rango):
     last = suc[-1:-1*rango-1:-1]
     lim = [last[0]]
@@ -93,17 +93,17 @@ for r in rValues:
         plt.show()
     # Cálculo de los conjuntos atractores y su periodo
     V0_r = [limite(orbi,epsilon,100) for orbi in orb_r]
-    # Si el periodo es igual a los 100 elementos que hemos consultado, consideramos
-    # que no hay conjunto atractor
+    # Si el periodo es igual a los 100 elementos que hemos consultado, 
+    # consideramos que no hay conjunto atractor
     if len(V0_r[0]) == 100:
         print("Para r =", r, " no existe conjunto atractor.")
-    # Si hay un periodo menor, comprobamos que los conjuntos atractores para cada
-    # x_0 coinciden (con diferencia menor que epsilon) y lo mostramos
+    # Si hay un periodo menor, comprobamos que los conjuntos atractores para 
+    # cada x_0 coinciden (con diferencia menor que epsilon) y lo mostramos
     else:
         for i in range(len(V0_r)-1):
             if not iguales(V0_r[i], V0_r[i+1], epsilon):
-                print("Para r =", r, ", los conjuntos atractores para x0 =", x0[i],
-                      "y x0 =", x0[i+1], "difieren en más de", epsilon)
+                print("Para r =", r, ", los conjuntos atractores para x0 =", 
+                      x0[i], "y x0 =", x0[i+1], "difieren en más de", epsilon)
         print("Para r =", r, " el conjunto atractor es V0 =", V0_r[0])
     # Guardamos el conjunto V_0 obtenido (sea o no atractor)
     V0_r[0].sort()
@@ -126,16 +126,17 @@ plt.ylabel("Valores en $V_0$")
 plt.savefig("V0Values.png")
 plt.show()
 
-# Calculamos el menor r de los que hemos considerado para el cual el conjunto atractor
-# tiene 8 elementos.
+# Calculamos el menor r de los que hemos considerado para el cual el conjunto 
+# atractor tiene 8 elementos.
 i = 0
 while len(V0[i]) != 8:
     i = i + 1
-print("El menor r de los considerados tal que V0 tiene 8 elementos es " + str(round(rValues[i],2)) + ".")
+print("El menor r de los considerados tal que V0 tiene 8 elementos es " + 
+      str(round(rValues[i],2)) + ".")
 print("El conjunto atractor correspondiente a dicha r es:", V0[i])
 
-# Estimamos el error cometido al calcular V_0 para cada valor de r y lo representamos
-# en una gráfica
+# Estimamos el error cometido al calcular V_0 para cada valor de r y lo 
+# representamos en una gráfica
 E = [error(V0[k],f,round(rValues[k],2)) for k in range(len(rValues))]
 plt.figure(figsize=(10,10))
 plt.plot(rValues,E)
@@ -145,9 +146,10 @@ plt.ylabel("Error en $V_0$")
 plt.savefig("V0Error.png")
 plt.show()
 
-#Calculamos el error para el V_0 obtenido en el apartado anterior (el primero con 8 elementos)
-print("El error al calcular el conjunto atractor correspondiente a r = " + str(round(rValues[i],2)) + 
-      " es de " + str(E[i]) + ".")
+# Calculamos el error para el V_0 obtenido en el apartado anterior (el primero 
+# con 8 elementos)
+print("El error al calcular el conjunto atractor correspondiente a r = " + 
+      str(round(rValues[i],2)) + " es de " + str(E[i]) + ".")
 
 
     
