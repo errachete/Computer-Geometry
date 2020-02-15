@@ -154,10 +154,10 @@ lonH_es = np.sum([tab_es[a] * len(table_es[a]) for a in tab_es.keys()]) / float(
 ent_es = -1 * np.sum([(a / float(total_es)) * np.log2(a / float(total_es)) for a in tab_es.values()])
 print("La longitud media usando la codificación de Huffman en inglés es:", lonH_en)
 print("La entropía en inglés es:", ent_en)
-print("En efecto se cumple el primer teorema de Shannon:", ent_en, "<", lonH_en, "<", ent_en + 1)
+print("En efecto, se cumple el primer teorema de Shannon:", ent_en, "<", lonH_en, "<", ent_en + 1)
 print("La longitud media usando la codificación de Huffman en castellano es:", lonH_es)
 print("La entropía en castellano es:", ent_es)
-print("En efecto se cumple el primer teorema de Shannon:", ent_es, "<", lonH_es, "<", ent_es + 1)
+print("En efecto, se cumple el primer teorema de Shannon:", ent_es, "<", lonH_es, "<", ent_es + 1)
 
 # Codificamos la palabra 'fractal' en ambos idiomas y comparamos su longitud con
 # la que se obtendría con la codificación binaria trivial
@@ -172,9 +172,16 @@ print("Su longitud es", str(len(cod_es)) + ", mientras que con la codificación 
 
 # Decodificamos la palabra 1010100001111011111100 haciendo uso del árbol de
 # Huffman obtenido a partir del texto en inglés
-word_en = decode('1010100001111011111100', tree_en)
+word = decode('1010100001111011111100', tree_en)
+word_en = decode(cod_en, tree_en)
+word_es = decode(cod_es, tree_es)
 print("La palabra correspondiente al código '1010100001111011111100' utilizando la codificación"
-      + "en inglés es", word_en)
+      + " en inglés es", word)
+print("Al decodificar el código '" + cod_en + "' utilizando la codificación en inglés"
+      + " obtenemos nuevamente", "'" + word_en + "'")
+print("Al decodificar el código '" + cod_es + "' utilizando la codificación en castellano"
+      + " obtenemos nuevamente", "'" + word_es + "'")
+
 
 # Calculamos la probabilidad de aparición de cada letra y la probabilidad  acumulada
 prob_en = tab_en.copy()
