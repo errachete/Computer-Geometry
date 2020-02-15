@@ -60,7 +60,7 @@ def error(V0,fun,r):
         V.append(np.array([fun(v0,r) for v0 in V[i]]))
         V[i+1].sort()
         E.append(max(V[i+1] - V[i]))
-    return E[0]
+    return max(E)
     
 
 # Calculamos la órbita parcial para un cierto conjunto de r y distintos x_0.
