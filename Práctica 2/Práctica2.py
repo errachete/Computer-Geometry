@@ -12,7 +12,7 @@ from collections import Counter
 from queue import PriorityQueue
 
 # Carpeta donde se encuentran los archivos
-ubica = "D:/Universidad/Geometría Computacional/Prácticas/Práctica 2"
+ubica = "./temp"
 
 # Vamos al directorio de trabajo
 os.chdir(ubica)
@@ -40,41 +40,44 @@ def __show_tree(tree, pre):
         __show_tree(tree.right, pre + '  ')
 
 # Función que calcula el siguiente nodo del árbol de Huffman y actualiza
-# la tabla de codificación y la lista de probabilidades de la forma correspondiente.
-# Recibe la probabilidad de aparición de cada caracter, la lista de nodos generados 
-# hasta el momento y la tabla de codificación hasta el momento.
+# la tabla de codificación y la lista de probabilidades de la forma
+# correspondiente
+# Recibe la probabilidad de aparición de cada caracter, la lista de nodos  
+# generados hasta el momento y la tabla de codificación hasta el momento.
 def huffman_branch(distr, treeList, table):
     # Extraemos los dos elementos con menor probabilidad de aparición
     first = distr.get()
     second = distr.get()
-    # Calculamos el nuevo elemento como la concatenación de los dos extraídos
-    # y su probabilidad como la suma de las probabilidades
+    # Calculamos el nuevo elemento como la concatenación de los dos 
+    # extraídos y su probabilidad como la suma de las probabilidades
     state_new = first[1] + second[1]
     probab_new = first[0] + second[0]
     
-    # Creamos y almacenamos un nuevo nodo del árbol de Huffman poniendo como hijos izquierdo
-    # y derecho los nodos correspondientes y como raíz el nuevo elemento calculado
-    # en el paso anterior como concatenación de los dos extraídos
+    # Creamos y almacenamos un nuevo nodo del árbol de Huffman poniendo 
+    # como hijos izquierdo y derecho los nodos correspondientes y como 
+    # raíz el nuevo elemento calculado en el paso anterior como
+    # concatenación de los dos extraídos
     node_new = TreeNode(state_new, treeList[first[1]], treeList[second[1]])
     treeList.pop(first[1])
     treeList.pop(second[1])
     treeList[state_new] = node_new
     
-    # Actualizamos la tabla de codificación añadiendo a la izquierda de los códigos
-    # correspondientes un 0 o un 1 según si quedan a la derecha o a la izquierda
-    # en el nuevo nodo del árbol
+    # Actualizamos la tabla de codificación añadiendo a la izquierda 
+    # de los códigos correspondientes un 0 o un 1 según si quedan a 
+    # la derecha o a la izquierda en el nuevo nodo del árbol
     for s in first[1]:
         table[s] = '0' + table[s]
     for s in second[1]:
         table[s] = '1' + table[s]
     
-    # Introducimos el nuevo elemento en la lista con la probabilidad correspondiente
+    # Introducimos el nuevo elemento en la lista con la probabilidad 
+    #correspondiente
     distr.put((probab_new, state_new))
     
     return distr 
 
-# Construye un árbol de Huffman y su tabla de codificación a partir de la lista
-# de caracteres y su probabilidad de aparición
+# Construye un árbol de Huffman y su tabla de codificación a partir 
+# de la lista de caracteres y su probabilidad de aparición
 def huffman_tree(distr):
     treeList = {}
     table = {}
@@ -85,7 +88,8 @@ def huffman_tree(distr):
         distr = huffman_branch(distr, treeList, table)
     return list(treeList.values())[0], table
 
-# Codifica una palabra utilizando la codificación de Huffman dada por parámetro
+# Codifica una palabra utilizando la codificación de Huffman dada por 
+#parámetro
 def code(word, code):
     res = ''
     for c in word:
@@ -120,9 +124,9 @@ es = es.lower()
 tab_en = Counter(en)
 tab_es = Counter(es)
 
-# Construimos una cola de prioridad con los caracteres y su frecuencia. De esta
-# forma, se mantendrá ordenada aunque introduzcamos elementos nuevos y devolverá
-# en primer lugar el que tenga la menor probabilidad
+# Construimos una cola de prioridad con los caracteres y su frecuencia. 
+# De esta forma, se mantendrá ordenada aunque introduzcamos elementos 
+# nuevos y devolverá en primer lugar el que tenga la menor probabilidad
 total_en = np.sum(list(tab_en.values()))
 distr_en = PriorityQueue()
 for c in tab_en:
@@ -133,8 +137,8 @@ distr_es = PriorityQueue()
 for c in tab_es:
     distr_es.put((tab_es[c]/float(total_es), c))
  
-# Llamamos a huffman_tree para construir el árbol de Huffman y la tabla de
-# codificación para cada idioma.
+# Llamamos a huffman_tree para construir el árbol de Huffman y la tabla
+# de codificación para cada idioma.
 tree_en, table_en = huffman_tree(distr_en)
 tree_es, table_es = huffman_tree(distr_es)
 print("El árbol de Huffman en inglés es:")
@@ -146,8 +150,8 @@ show_tree(tree_es)
 print("La tabla de codificación de Huffman en castellano es:")
 print(table_es)
 
-# Calculamos la longitud media de cada codificación y  su entropía y comprobamos
-# que se cumple el primer teorema de Shannon
+# Calculamos la longitud media de cada codificación y  su entropía y 
+# comprobamos que se cumple el primer teorema de Shannon
 lonH_en = np.sum([tab_en[a] * len(table_en[a]) for a in tab_en.keys()]) / float(total_en)
 ent_en = -1 * np.sum([(a / float(total_en)) * np.log2(a / float(total_en)) for a in tab_en.values()])
 lonH_es = np.sum([tab_es[a] * len(table_es[a]) for a in tab_es.keys()]) / float(total_es)
@@ -159,33 +163,28 @@ print("La longitud media usando la codificación de Huffman en castellano es:", 
 print("La entropía en castellano es:", ent_es)
 print("En efecto, se cumple el primer teorema de Shannon:", ent_es, "<", lonH_es, "<", ent_es + 1)
 
-# Codificamos la palabra 'fractal' en ambos idiomas y comparamos su longitud con
-# la que se obtendría con la codificación binaria trivial
+# Codificamos la palabra 'fractal' en ambos idiomas y comparamos su 
+# longitud con la que se obtendría con la codificación binaria trivial
 cod_en = code('fractal', table_en)
 cod_es = code('fractal', table_es)
 print("Con la codificación en inglés, la palabra 'fractal' se codifica como:", cod_en)
-print("Su longitud es", str(len(cod_en)) + ", mientras que con la codificación trivial sería",
-      np.ceil(np.log2(total_en)) * len('fractal'))
+print("Su longitud es", str(len(cod_en)) + ", mientras que con la codificación trivial sería", np.ceil(np.log2(total_en)) * len('fractal'))
 print("Con la codificación en castellano, la palabra 'fractal' se codifica como:", cod_es)
-print("Su longitud es", str(len(cod_es)) + ", mientras que con la codificación trivial sería",
-      np.ceil(np.log2(total_es)) * len('fractal'))
+print("Su longitud es", str(len(cod_es)) + ", mientras que con la codificación trivial sería", np.ceil(np.log2(total_es)) * len('fractal'))
 
-# Decodificamos la palabra 1010100001111011111100 haciendo uso del árbol de
-# Huffman obtenido a partir del texto en inglés
-# También decodificamos los códigos obtenidos al codificar 'fractal' y se vuelve
-# a obtener esta palabra
+# Decodificamos la palabra 1010100001111011111100 haciendo uso del árbol
+# de Huffman obtenido a partir del texto en inglés
+# También decodificamos los códigos obtenidos al codificar 'fractal' y 
+# se vuelve a obtener esta palabra
 word = decode('1010100001111011111100', tree_en)
 word_en = decode(cod_en, tree_en)
 word_es = decode(cod_es, tree_es)
-print("La palabra correspondiente al código '1010100001111011111100' utilizando la codificación"
-      + " en inglés es", word)
-print("Al decodificar el código '" + cod_en + "' utilizando la codificación en inglés"
-      + " obtenemos nuevamente", "'" + word_en + "'")
-print("Al decodificar el código '" + cod_es + "' utilizando la codificación en castellano"
-      + " obtenemos nuevamente", "'" + word_es + "'")
+print("La palabra correspondiente al código '1010100001111011111100' utilizando la codificación" + " en inglés es", word)
+print("Al decodificar el código '" + cod_en + "' utilizando la codificación en inglés" + " obtenemos nuevamente", "'" + word_en + "'")
+print("Al decodificar el código '" + cod_es + "' utilizando la codificación en castellano" + " obtenemos nuevamente", "'" + word_es + "'")
 
-
-# Calculamos la probabilidad de aparición de cada letra y la probabilidad  acumulada
+# Calculamos la probabilidad de aparición de cada letra y la
+# probabilidad acumulada
 prob_en = tab_en.copy()
 for a in prob_en.keys():
     prob_en[a] /= float(total_en)
@@ -203,7 +202,8 @@ plt.legend(loc="lower right")
 plt.savefig("Lorenz.png")
 plt.show()
 
-# Calculamos el índice de Gini y la diversidad 2D de Hill para la variable aleatoria
+# Calculamos el índice de Gini y la diversidad 2D de Hill para la
+# variable aleatoria
 gi = 1 - 2 / len(acum_en) * np.sum(acum_en)
 dHill = 1 / np.sum(np.array([a[1] for a in prob_en])**2)
 print("El índice de Gini es GI =", gi)
