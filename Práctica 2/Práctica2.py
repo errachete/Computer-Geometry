@@ -168,9 +168,9 @@ print("En efecto, se cumple el primer teorema de Shannon:", ent_es, "<", lonH_es
 cod_en = code('fractal', table_en)
 cod_es = code('fractal', table_es)
 print("Con la codificación en inglés, la palabra 'fractal' se codifica como:", cod_en)
-print("Su longitud es", str(len(cod_en)) + ", mientras que con la codificación trivial sería", np.ceil(np.log2(total_en)) * len('fractal'))
+print("Su longitud es", str(len(cod_en)) + ", mientras que con la codificación trivial sería", np.ceil(np.log2(len(tab_en))) * len('fractal'))
 print("Con la codificación en castellano, la palabra 'fractal' se codifica como:", cod_es)
-print("Su longitud es", str(len(cod_es)) + ", mientras que con la codificación trivial sería", np.ceil(np.log2(total_es)) * len('fractal'))
+print("Su longitud es", str(len(cod_es)) + ", mientras que con la codificación trivial sería", np.ceil(np.log2(len(tab_es))) * len('fractal'))
 
 # Decodificamos la palabra 1010100001111011111100 haciendo uso del árbol
 # de Huffman obtenido a partir del texto en inglés
