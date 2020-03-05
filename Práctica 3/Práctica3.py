@@ -86,8 +86,8 @@ for epsilon in np.arange(0.1, 0.45, 0.05):
         
         plt.figure(figsize=(10,10))
         plt.scatter(X[:,0], X[:,1], c=colorlabels, s=20)
-        plt.title(r"Clusters con $\epsilon=$" + str(epsilon))
-        plt.savefig("DBSCAN"+ str(metrica[j]) + str(epsilon) + ".png")
+        plt.title(r"Clusters con $\epsilon=$" + str(round(epsilon,2)))
+        plt.savefig("DBSCAN"+ str(metrica[j]) + str(round(epsilon,2)) + ".png")
         plt.show()
         print("Coeficiente de Silhouette:", silhouette)
 
