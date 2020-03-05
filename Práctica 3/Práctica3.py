@@ -72,30 +72,33 @@ plt.show()
 # Los clasificamos mediante el algoritmo DBSCAN con épsilon en el
 # itervalo [0.1, 1] variando de 0.1 en 0.1 y calculamos el coeficiente
 # de Silhouette para cada épsilon
-sil = np.array([])
+sil = [np.array([]),np.array([])]
 X = np.array(X)
 colors.append('black')
+metrica = ['euclidean', 'manhattan']
 for epsilon in np.arange(0.1, 0.45, 0.05):
-
-    db = DBSCAN(eps=epsilon, min_samples=10, metric='euclidean').fit(X)
-    labels = np.array(db.labels_)
-    silhouette = metrics.silhouette_score(X, labels) if len(set(labels)) != 1 else -1
-    sil = np.append(sil, silhouette)
-    colorlabels = [colors[i] for i in labels]
-    
-    plt.figure(figsize=(10,10))
-    plt.scatter(X[:,0], X[:,1], c=colorlabels, s=20)
-    plt.title(r"Clusters con $\epsilon=$" + str(epsilon))
-    plt.savefig("DBSCAN" + str(epsilon) + ".png")
-    plt.show()
-    print("Coeficiente de Silhouette:", silhouette)
+    for j in range(0,2):
+        db = DBSCAN(eps=epsilon, min_samples=10, metric=metrica[j]).fit(X)
+        labels = np.array(db.labels_)
+        silhouette = metrics.silhouette_score(X, labels) if len(set(labels)) != 1 else -1
+        sil[j] = np.append(sil[j], silhouette)
+        colorlabels = [colors[i] for i in labels]
+        
+        plt.figure(figsize=(10,10))
+        plt.scatter(X[:,0], X[:,1], c=colorlabels, s=20)
+        plt.title(r"Clusters con $\epsilon=$" + str(epsilon))
+        plt.savefig("DBSCAN"+ str(metrica) + str(epsilon) + ".png")
+        plt.show()
+        print("Coeficiente de Silhouette:", silhouette)
 
 # Representamos en un gráfico el valor del coeficiente de silhouette para
 # cada épsilon
 plt.figure(figsize=(10,10))
-plt.plot(np.arange(0.1, 0.45, 0.05), sil, 'ko-')
+plt.plot(np.arange(0.1, 0.45, 0.05), sil[0], 'ko-', label="Métrica euclidea")
+plt.plot(np.arange(0.1, 0.45, 0.05), sil[1], 'ro-', label="Métrica manhattan")
 plt.title(r"Valor de $\bar{s}$ según $\epsilon$")
 plt.xlabel(r"$\epsilon$")
 plt.ylabel(r"$\bar{s}$")
+plt.legend(loc="lower right")
 plt.savefig("DBSCANSilh.png")
 plt.show()
