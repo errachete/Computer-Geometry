@@ -70,7 +70,7 @@ plt.show()
 ## Parte 2: DBSCAN
 
 # Los clasificamos mediante el algoritmo DBSCAN con épsilon en el
-# itervalo [0.1, 1] variando de 0.1 en 0.1 y calculamos el coeficiente
+# itervalo [0.1, 0.4] variando de 0.05 en 0.05 y calculamos el coeficiente
 # de Silhouette para cada épsilon
 sil = [np.array([]),np.array([])]
 X = np.array(X)
