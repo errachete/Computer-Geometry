@@ -11,11 +11,8 @@ import matplotlib.pyplot as plt
 from collections import Counter
 from queue import PriorityQueue
 
-# Carpeta donde se encuentran los archivos
-ubica = "./temp"
-
 # Vamos al directorio de trabajo
-os.chdir(ubica)
+os.chdir("./resources")
 
 
 # Clase para definir un nodo de un árbol binario.

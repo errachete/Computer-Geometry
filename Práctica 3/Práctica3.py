@@ -12,11 +12,8 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Carpeta donde se encuentran los archivos
-ubica = "./temp"
-
 # Vamos al directorio de trabajo
-os.chdir(ubica)
+os.chdir("./resources")
 
 
 ## Parte 1: K-Means

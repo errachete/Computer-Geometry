@@ -9,7 +9,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-os.chdir("./temp");
+os.chdir("./resources");
 
 # Función logística f utilizada para construir el sistema dinámico
 def f(x,r):

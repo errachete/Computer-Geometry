@@ -13,11 +13,8 @@ from scipy.io import netcdf as nc
 from sklearn.decomposition import PCA
 from matplotlib import cm
 
-# Carpeta donde se encuentran los archivos
-ubica = "./temp"
-
 # Vamos al directorio de trabajo
-os.chdir(ubica)
+os.chdir("./resources")
 
 
 ## Ejercicio 1:
