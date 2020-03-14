@@ -34,7 +34,8 @@ f.close()
 
 # Hacemos PCA para obtener cuatro componentes principales
 num_comp = 4
-X = hgt_2019[:,5,:,:]
+indp = (level == 500)
+X = hgt_2019[:,indp,:,:]
 X2D = X.reshape(len(time), len(lats)*len(lons))
 pca = PCA(n_components=num_comp)
 redX2D = pca.fit_transform(X2D.T).T
@@ -111,7 +112,8 @@ f.close()
 # Calculamos el error de nuestra estimación de la temperatura con respecto a
 # los datos reales y lo escalamos de acuerdo a la forma en que están
 # escaladas las temperaturas en el fichero
-temp_real = air_2020[indt,0,:,:]
+indp = (level == 1000)
+temp_real = air_2020[indt,indp,:,:]
 error = np.mean(abs(temp_real-temp_est))
 error = error*sc_f
 print("El error medio cometido al estimar la temperatura es de", error)
