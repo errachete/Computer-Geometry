@@ -44,6 +44,7 @@ redX = redX2D.reshape(num_comp, len(lats), len(lons))
 # Representamos como gráfica en 3 dimensiones y gráfica de curvas de nivel
 # las cuatro componentes principales obtenidas
 fig = plt.figure()
+fig = plt.figure(figsize=(9,5))
 fig.subplots_adjust(hspace=0.4, wspace=0.4)
 for i in range(1, 5):
     ax = fig.add_subplot(2, 2, i)
