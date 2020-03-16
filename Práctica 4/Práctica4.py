@@ -100,20 +100,25 @@ sc_f = f.variables['air'].scale_factor
 f.close()
 
 # Calculamos nuestra estimación de la temperatura como la media de la de los
-# cuatro días análogos
-temp_sim = air_2019[[True if x in time_sim else False for x in time],0,:,:]
-temp_est =  np.mean(temp_sim, axis=0)
+# cuatro días análogos para toda la malla
+indp = (level == 1000)
+temp_sim = air_2019[[True if x in time_sim else False for x in time],indp,:,:]
+temp_est = np.mean(temp_sim, axis=0)
 
 # Leemos los datos correspondientes a las temperaturas de 2020
 f = nc.netcdf_file('air.2020.nc', 'r')
 air_2020 = f.variables['air'][:].copy()
 f.close()
 
+# Nos quedamos con las temperaturas estimadas y reales de la región pedida,
+# con longitud y latitud en los intervalos que usamos antes
+temp_real = air_2020[indt,indp,:,:]
+temp_real_rest = temp_real[:,indy,:][:,:,indx]
+temp_est_rest = temp_est[indy,:][:,indx]
+
 # Calculamos el error de nuestra estimación de la temperatura con respecto a
 # los datos reales y lo escalamos de acuerdo a la forma en que están
 # escaladas las temperaturas en el fichero
-indp = (level == 1000)
-temp_real = air_2020[indt,indp,:,:]
-error = np.mean(abs(temp_real-temp_est))
+error = np.mean(abs(temp_real_rest-temp_est_rest))
 error = error*sc_f
-print("El error medio cometido al estimar la temperatura es de", error)
+print("El error medio cometido al estimar la temperatura en la región pedida es de", error)
