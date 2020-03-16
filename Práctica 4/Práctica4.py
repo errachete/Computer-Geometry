@@ -50,6 +50,7 @@ for i in range(1, 5):
     ax.text(0.5, 90, 'PCA-'+str(i),
            fontsize=18, ha='center')
     plt.contour(lons, lats, redX[i-1,:,:], cmap=cm.rainbow_r)
+plt.savefig("PCA.png")
 plt.show()
 
 # Mostramos la varianza explicada
