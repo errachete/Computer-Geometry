@@ -45,7 +45,7 @@ redX = redX2D.reshape(num_comp, len(lats), len(lons))
 # las cuatro componentes principales obtenidas
 fig = plt.figure()
 fig.subplots_adjust(hspace=0.4, wspace=0.4)
-for i in range(1, 5):
+for i in range(1, num_comp+1):
     ax = fig.add_subplot(2, 2, i)
     ax.text(0.5, 90, 'PCA-'+str(i),
            fontsize=18, ha='center')
