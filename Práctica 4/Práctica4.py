@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 '''
-Práctica 3
+Práctica 4
 
 Rubén Ruperto Díaz y Rafael Herrera Troca
 '''
