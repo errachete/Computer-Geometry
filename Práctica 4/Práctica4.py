@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 '''
-Práctica 3
+Práctica 4
 
 Rubén Ruperto Díaz y Rafael Herrera Troca
 '''
@@ -16,7 +16,8 @@ from matplotlib import cm
 # Vamos al directorio de trabajo
 os.chdir("./resources")
 
-# 
+# Dados dos elementos y los pesos a utilizar, devuelve la 2-distancia
+# entre ambos
 def dist(x1, x2, w):
     return np.sqrt(np.sum(w*abs(x1-x2)**2))
 
@@ -59,8 +60,8 @@ print("La varianza explicada es:", pca.explained_variance_ratio_)
 
 ## Ejercicio 2:
 
-# Calculamos tres arrays de booleanos según si la longitud y la latitud están
-# en el intervalo que queremos y si la presión es 1000 o 500 hPa
+# Calculamos tres arrays de booleanos según si la longitud y la latitud 
+# están en el intervalo que queremos y si la presión es 1000 o 500 hPa
 indx = (lons > 340) | (lons < 20)
 indy = (lats > 30) & (lats < 50)
 indp = (level == 1000) | (level == 500)
