@@ -99,6 +99,7 @@ for l in dias_sim:
 f = nc.netcdf_file('air.2019.nc', 'r')
 air_2019 = f.variables['air'][:].copy()
 sc_f = f.variables['air'].scale_factor
+offs = f.variables['air'].add_offset
 f.close()
 
 # Calculamos nuestra estimación de la temperatura como la media de la de los
@@ -124,3 +125,48 @@ temp_est_rest = temp_est[indy,:][:,indx]
 error = np.mean(abs(temp_real_rest-temp_est_rest))
 error = error*sc_f
 print("El error medio cometido al estimar la temperatura en la región pedida es de", error)
+
+
+# Representamos sobre dos mapas de la región restringida la temperatura 
+# real y la estimada
+
+# Es necesario tener instalada la libería de Python Basemap para ejecutar
+# el código que viene a continuación
+
+from mpl_toolkits.basemap import Basemap
+
+# Creamos un mapa de la región en la que estamos trabajando, 
+# especificando los límites de latitud y longitud
+m = Basemap(projection='mill', resolution='l', llcrnrlat=32.5, urcrnrlat=47.5, llcrnrlon=-17.5, urcrnrlon=17.5, )
+
+# Reorganizamos los datos, ya que la librería requiere que las longitudes
+# estén entre -180 y 180
+lons_mod = [i if i < 180 else i - 360 for i in lons[indx]]
+ordlons = np.append(lons_mod[8:],lons_mod[:8])
+
+# Hacemos una malla para posteriormente representar los datos con contourf
+lon2, lat2 = np.meshgrid(ordlons,lats[indy])
+x, y = m(lon2, lat2)
+
+# Representamos el mapa con la temperatura real el dia 20/01/20, pasando
+# los datos a grados Celsius
+fig = plt.figure()
+data = temp_real_rest[0]
+data = data * sc_f + offs - 273.15
+orddata = np.array([np.append(i[8:],i[:8]) for i in data])
+m.drawcoastlines()
+a = m.contourf(x,y,orddata,np.linspace(-1,18,20),cmap=plt.cm.get_cmap('jet'))
+fig.colorbar(a)
+m.shadedrelief()
+plt.savefig('mapa_temp_real.png')
+
+# Representamos el mapa con nuestra predicción para el dia 20/01/20
+fig = plt.figure()
+data = temp_est_rest
+data = data * sc_f + offs - 273.15
+orddata = np.array([np.append(i[8:],i[:8]) for i in data])
+m.drawcoastlines()
+a = m.contourf(x,y,orddata,np.linspace(-1,18,20),cmap=plt.cm.get_cmap('jet'))
+fig.colorbar(a)
+m.shadedrelief()
+plt.savefig('mapa_temp_est.png')
