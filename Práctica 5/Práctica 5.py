@@ -156,7 +156,7 @@ plt.show()
 
 # Usamos la función animate definida arriba para crear la 
 # animación de la familia paramétrica dada en param2
-tvalues = np.linspace(0, 1, 300, endpoint=False)
+tvalues = np.linspace(0, 1, 30, endpoint=True)
 fig = plt.figure(figsize=(10,10))
 ani = animation.FuncAnimation(fig, animate, tvalues, fargs=(param2, x, y, z, x2, y2, z2, False))
 ani.save('ani_ej2.gif', fps= 60)
@@ -185,7 +185,7 @@ phi2, theta2 = cart2esf(x2, y2, z2)
 
 # Usamos la función animate definida arriba para crear la 
 # animación de la familia paramétrica dada en param3
-tvalues = np.linspace(0, 1, 300, endpoint=False)
+tvalues = np.linspace(0, 1, 30, endpoint=True)
 fig = plt.figure(figsize=(10,10))
 ani = animation.FuncAnimation(fig, animate, tvalues, fargs=(param3, phi, theta, z, phi2, theta2, z2, False))
 ani.save('ani_ej3.gif', fps=60)
