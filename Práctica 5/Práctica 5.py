@@ -115,8 +115,8 @@ u = np.linspace(0, np.pi, 25)
 v = np.linspace(0, 2 * np.pi, 50)
 
 # Transformamos las coordenadas polares a cartesianas
-x = np.outer(np.sin(u), np.sin(v))
-y = np.outer(np.sin(u), np.cos(v))
+x = np.outer(np.sin(u), np.cos(v))
+y = np.outer(np.sin(u), np.sin(v))
 z = np.outer(np.cos(u), np.ones_like(v))
 
 # Escribimos los puntos de la curva
@@ -174,8 +174,8 @@ ani.save('ani_ej2_fix.gif', fps= 60)
 u = np.linspace(0.1, np.pi, 25)
 v = np.linspace(0, 2 * np.pi, 50)
 
-x = np.outer(np.sin(u), np.sin(v))
-y = np.outer(np.sin(u), np.cos(v))
+x = np.outer(np.sin(u), np.cos(v))
+y = np.outer(np.sin(u), np.sin(v))
 z = np.outer(np.cos(u), np.ones_like(v))
 
 # Transformamos las coordenadas cartesianas que definen la
