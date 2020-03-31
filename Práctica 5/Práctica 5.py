@@ -17,13 +17,13 @@ os.chdir("./resources")
 
 
 # Proyección estereográfica: Dado un punto de R^3, devuelve el punto
-# de R^2 en el que se transforma (sumergido en R^3 poniendo z = -1)
-# Para evitar la división entre 0, añadimos un épsilon de 10^-10
+# de R^2 en el que se transforma (sumergido en R^3 poniendo z = 0)
+# Para evitar la división entre 0, añadimos un épsilon de 10^-20
 # al divisor
 def proy_est(x, y, z):
     eps = 10**-20
-    xp = x / (1 - z + eps)
-    yp = y / (1 - z + eps)
+    xp = x / (1 + z + eps)
+    yp = y / (1 + z + eps)
     zp = np.zeros_like(z)
     return xp, yp, zp
 
