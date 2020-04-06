@@ -162,11 +162,11 @@ phi2, theta2 = cart2esf(x2, y2, z2)
 
 # Usamos la función animate definida arriba para crear la 
 # animación de la familia paramétrica dada en param3
-tvalues = np.linspace(0, 1, 100, endpoint=True)
+tvalues = np.linspace(0, 1, 150, endpoint=True)
 fig = plt.figure(figsize=(10,10))
 ani = animation.FuncAnimation(fig, animate, tvalues, fargs=(param3, phi, theta, z, phi2, theta2, z2, False))
-ani.save('ani_ej3.gif', writer='imagemagick', fps=20)
+ani.save('ani_ej3.gif', writer='imagemagick', fps=30)
 
 fig = plt.figure(figsize=(10,10))
 ani = animation.FuncAnimation(fig, animate, tvalues, fargs=(param3, phi, theta, z, phi2, theta2, z2, True))
-ani.save('ani_ej3_fix.gif', writer='imagemagick', fps=20)
+ani.save('ani_ej3_fix.gif', writer='imagemagick', fps=30)
