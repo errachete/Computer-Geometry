@@ -57,14 +57,6 @@ def cart2esf(x, y, z):
     theta[c5] = np.pi + np.arctan(y[c5]/x[c5])
         
     return phi, theta
-        
-# Dadas unas coordenadas polares r, theta pertenecientes a
-# R^2, las transforma en las coordenadas cartesianas
-# correspondientes x, y de R^2
-def pol2cart(r, theta):
-    x = r * np.cos(theta)
-    y = r * np.sin(theta)
-    return x, y
 
 # Familia paramétrica dada en el ejercicio 2
 def param2(t, x, y, z):
@@ -76,19 +68,14 @@ def param2(t, x, y, z):
     return xt, yt, zt
     
 # Familia paramétrica definida para el ejercicio 3
-# Avanza desde la identidad hasta la proyección estereográfica
-# con coordenadas polares según el valor de t
-# Devuelve el resultado en coordenadas cartesianas
+# Avanza desde la identidad hasta la proyección estereográfica de
+# coordenadas polares a cartesianas según el valor de t
 def param3(t, phi, theta, z):
-    eps = 10**-20
     
     # Aplicamos la transformación según t
-    rt = ((1-t)*phi*np.sin(phi)/2 + t) / (np.tan((1-t)*np.arctan(phi/2) + t*phi/2) + eps)
-    thetat = theta
+    xt = np.cos(theta) * (t*np.tan(t*phi/2 + (1-t)*np.arctan(phi/2)) + (1-t)*np.sin(phi))
+    yt = np.sin(theta) * (t*np.tan(t*phi/2 + (1-t)*np.arctan(phi/2)) + (1-t)*np.sin(phi))
     zt = -t + z*(1-t)
-    
-    # Transformamos las coordenadas polares devueltas en cartesianas
-    xt, yt = pol2cart(rt, thetat)
     
     return xt, yt, zt
 
@@ -168,28 +155,18 @@ ani.save('ani_ej2_fix.gif', writer='imagemagick', fps= 30)
 
 ## Ejercicio 3 (voluntario)
 
-# Generamos de nuevo la malla para representar la esfera evitando 
-# que aparezca el polo norte porque da problemas al hacer la 
-# animación (explicados con más detalle en la memoria)
-u = np.linspace(0.1, np.pi, 25)
-v = np.linspace(0, 2 * np.pi, 50)
-
-x = np.outer(np.sin(u), np.cos(v))
-y = np.outer(np.sin(u), np.sin(v))
-z = np.outer(np.cos(u), np.ones_like(v))
-
-# Transformamos las coordenadas cartesianas que definen la
-# esfera y nuestra curva a coordenadas esféricas
+# Pasamos las coordenadas cartesianas a esféricas porque nuestra
+# parametrización utiliza estas coordenadas
 phi, theta = cart2esf(x, y, z)
 phi2, theta2 = cart2esf(x2, y2, z2)
 
 # Usamos la función animate definida arriba para crear la 
 # animación de la familia paramétrica dada en param3
-tvalues = np.linspace(0, 1, 150, endpoint=True)
+tvalues = np.linspace(0, 1, 100, endpoint=True)
 fig = plt.figure(figsize=(10,10))
 ani = animation.FuncAnimation(fig, animate, tvalues, fargs=(param3, phi, theta, z, phi2, theta2, z2, False))
-ani.save('ani_ej3.gif', writer='imagemagick', fps=30)
+ani.save('ani_ej3.gif', writer='imagemagick', fps=20)
 
 fig = plt.figure(figsize=(10,10))
 ani = animation.FuncAnimation(fig, animate, tvalues, fargs=(param3, phi, theta, z, phi2, theta2, z2, True))
-ani.save('ani_ej3_fix.gif', writer='imagemagick', fps=30)
+ani.save('ani_ej3_fix.gif', writer='imagemagick', fps=20)
