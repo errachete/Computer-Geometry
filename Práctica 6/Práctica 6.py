@@ -8,6 +8,7 @@ Rubén Ruperto Díaz y Rafael Herrera Troca
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import animation
 
 # Vamos al directorio de trabajo
 os.chdir("./resources")
@@ -60,6 +61,16 @@ def area(q0, dq0, F, d, n):
         valle = np.arange(w[0], w[1])
         mitad = valle[np.where(p[valle] >= 0)]
         return 2 * np.trapz(p[mitad],q[mitad])
+    
+# Representa el mayor diagrama de fases y el estado de D0 para 
+# un determinado n    
+def deform_d0(t, max_q0, max_dq0, F, d, n, puntos):
+    plt.cla()
+    diag_fases(max_q0, max_dq0, F, d, n, "black")
+    ax = plt.axes()
+    ax.plot([a[0] for a in puntos[t]], [a[1] for a in puntos[t]], "r")
+
+    return ax
     
     
 ## Ejercicio 1
@@ -142,3 +153,62 @@ inf_area2 = area(inf_q0, inf_dq0, F, d2, n2) / 2
 area_tot2 = max_area2 - inf_area2
 print("El área total con un delta más fino es", area_tot2)
 print("El error cometido en el primer cálculo del área es", abs(area_tot - area_tot2))
+
+# Sabemos que el teorema de Liouville se cumple porque se dan
+# las condiciones para que así sea.
+# Para entender cómo se mantiene el área, vamos a
+# representar la deformación del cuadrado que delimita las condiciones
+# iniciales a lo largo del tiempo.
+# Comenzamos tomando los puntos que delimitan dicho cuadrado
+array_q0 = np.linspace(0, 1, 100)
+array_dq0 = np.linspace(0, 2, 100)
+mesh = []
+for i in array_q0:
+    mesh.append([i,0])
+for j in array_dq0:
+    mesh.append([1,j])
+for i in array_q0[::-1]:
+    mesh.append([i,2])
+for j in array_dq0[::-1]:
+    mesh.append([0,j])
+
+# Calculamos los valores sucesivos de p y q para cada q0 y dq0
+seq_q = []
+seq_p = []
+n = int(16/d)
+for i in mesh:
+    q = orbita(n, i[0], i[1], F, d)
+    dq = deriv(q, i[1], d)
+    p = dq/2
+    seq_q.append(q)
+    seq_p.append(p)
+
+# Reorganizamos los puntos para poder representarlos más fácilmente
+areas = []
+puntos = []
+for i in range(len(seq_q[0])):
+    aux = []
+    for j in range(len(mesh)):
+        aux.append([seq_q[j][i],seq_p[j][i]])
+    puntos.append(aux)
+
+# Representamos algunos cuadrados junto al diagrama de fases mayor
+# para ver cómo se va deformando
+N = [0,5000,10000,20000,30000]
+for t in N:
+    plt.figure(figsize=(10,10))
+    deform_d0(t, max_q0, max_dq0, F, d, n, puntos)
+    plt.title(r"Deformación de $D_0$ en $t="+str(t*d)+"$")
+    plt.axis('equal')
+    plt.xlabel(r"$q(t)$")
+    plt.ylabel(r"$p(t)$")
+    plt.savefig("deform"+str(t)+".png")
+    plt.show()
+    
+# Por último, haremos una animación representando el proceso que
+# sigue la deformación de D0 hasta n=30000
+t_values = np.arange(0,30000,500)
+fig = plt.figure(figsize=(10,10))
+plt.axis('equal')
+ani = animation.FuncAnimation(fig, deform_d0, t_values, fargs=(max_q0, max_dq0, F, d, n, puntos))
+ani.save('animation.gif', writer='imagemagick', fps=12)
