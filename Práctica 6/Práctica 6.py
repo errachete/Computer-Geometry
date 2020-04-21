@@ -19,7 +19,7 @@ def F(q):
     ddq = -2*q * (q**2 - 1)
     return ddq
 
-# Resolución de la ecuación dinámica q' = F(q), obteniendo la órbita q(t)
+# Resolución de la ecuación dinámica q'' = F(q), obteniendo la órbita q(t)
 # Los valores iniciales son la posición q0 := q(0) y la derivada dq0 := q'(0)
 def orbita(n, q0, dq0, F, d):
     q = np.empty([n+1])
@@ -34,7 +34,7 @@ def orbita(n, q0, dq0, F, d):
 # un cierto delta 'd' pasado por parámetro
 def deriv(q, dq0, d):
    dq = (q[1:len(q)] - q[0:(len(q)-1)]) / d
-   dq = np.insert(dq, 0, dq0)
+   dq = np.insert(dq, len(q)-1, dq[-1])
    return dq
 
 # Representa en la gráfica activa el diagrama de fases para los datos 
