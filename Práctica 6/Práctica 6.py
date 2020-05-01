@@ -71,6 +71,9 @@ def deform_d0(t, max_q0, max_dq0, F, d, n, puntos):
     ax.plot([a[0] for a in puntos[t]], [a[1] for a in puntos[t]], "r")
 
     return ax
+
+def poly_area(x,y):
+    return 0.5*np.abs(np.dot(x,np.roll(y,1))-np.dot(y,np.roll(x,1)))
     
     
 ## Ejercicio 1
@@ -154,11 +157,8 @@ area_tot2 = max_area2 - inf_area2
 print("El área total con un delta más fino es", area_tot2)
 print("El error cometido en el primer cálculo del área es", abs(area_tot - area_tot2))
 
-# Sabemos que el teorema de Liouville se cumple porque se dan
-# las condiciones para que así sea.
-# Para entender cómo se mantiene el área, vamos a
-# representar la deformación del cuadrado que delimita las condiciones
-# iniciales a lo largo del tiempo.
+# En cuanto al teorema de Liouville, vamos a comprobar si el
+# área de D0 se mantiene al irse deformando con el tiempo.
 # Comenzamos tomando los puntos que delimitan dicho cuadrado
 array_q0 = np.linspace(0, 1, 100)
 array_dq0 = np.linspace(0, 2, 100)
@@ -183,14 +183,31 @@ for i in mesh:
     seq_q.append(q)
     seq_p.append(p)
 
-# Reorganizamos los puntos para poder representarlos más fácilmente
-areas = []
+# Reorganizamos los puntos para poder utilizarlos más fácilmente
 puntos = []
 for i in range(len(seq_q[0])):
     aux = []
     for j in range(len(mesh)):
         aux.append([seq_q[j][i],seq_p[j][i]])
     puntos.append(aux)
+    
+# Calculamos el área de las deformaciones de D0 
+# sucesivas y comprobamos que es constante hasta el 30000.
+# A partir de ahí empieza a acumular demasiado error
+# aunque se mantiene entre 0.7 y 1.8
+areas = []
+for i in range(len(puntos)):
+    areas.append(poly_area([a[0] for a in puntos[i]], [a[1] for a in puntos[i]]))
+    
+equals = True
+for i in range(30000):
+    if abs(areas[0] - areas[i]) > 10**(-2):
+        equals = False
+if equals:
+    print("Todas las áreas son iguales")
+else:
+    print("No todas las áreas son iguales")
+    
 
 # Representamos algunos cuadrados junto al diagrama de fases mayor
 # para ver cómo se va deformando
