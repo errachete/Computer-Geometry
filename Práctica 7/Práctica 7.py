@@ -8,6 +8,7 @@ Rubén Ruperto Díaz y Rafael Herrera Troca
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.spatial import ConvexHull
 from mpl_toolkits.mplot3d import axes3d
 from matplotlib import animation
 from skimage import io,color
@@ -18,12 +19,12 @@ os.chdir("./resources")
 
 # Calcula el diámetro de un conjunto dado con coordenadas
 # en las matrices x, y, z
-def diametro(x, y, z, paso=1):
+def diametro(puntos):
     diam = 0
-    puntos = np.array(list(zip(x.ravel(),y.ravel(),z.ravel())))
-    for i in range(0, len(puntos), paso):
-        for j in range(i, len(puntos), paso):
-            d = np.sqrt(np.sum((puntos[i]-puntos[j])**2))
+    covindx = ConvexHull(puntos).vertices
+    for i in range(len(covindx)):
+        for j in range(i, len(covindx)):
+            d = np.sqrt(np.sum((puntos[covindx[i]]-puntos[covindx[j]])**2))
             diam = d if d > diam else diam
     return diam
 
@@ -70,7 +71,7 @@ def animate1(t, fam, x, y, z, c, d):
     
     ax = plt.axes(projection='3d')
     ax.plot_surface(xt,yt,zt,cmap=plt.cm.get_cmap('viridis'))
-    ax.auto_scale_xyz([-4, 13], [-4, 13], [-1, 1])
+    ax.auto_scale_xyz([-4, 13], [-4, 13], [-2, 2])
     
     return ax
 
@@ -90,8 +91,8 @@ def animate2(t, fam, x, y, z, col, c, d):
 ## Ejercicio 1
 
 # Comenzamos por construir la figura que vamos a utilizar
-x = np.linspace(-np.pi, np.pi, 51)
-y = np.linspace(-np.pi, np.pi, 51)
+x = np.linspace(-np.pi, np.pi, 101)
+y = np.linspace(-np.pi, np.pi, 101)
 x,y = np.meshgrid(x,y)
 z = np.sin(x)*np.sin(y)
 
@@ -104,12 +105,12 @@ plt.savefig('fig.png')
 plt.show()
 
 # Calculamos su diámetro y su centroide
-d = diametro(x,y,z)
+d = diametro(np.array(list(zip(x.ravel(),y.ravel(),z.ravel()))))
 c = centroide(x,y,z)
 
 # Construimos la animación
 tvalues = np.linspace(0, 1, 150, endpoint=True)
-fig = plt.figure(figsize=(10,5))
+fig = plt.figure(figsize=(10,10))
 ani = animation.FuncAnimation(fig, animate1, tvalues, fargs=(param, x, y, z, c, d))
 ani.save('ani_ej1.gif', writer='imagemagick', fps=30)
 
@@ -139,7 +140,7 @@ plt.savefig('fig.png')
 plt.show()
 
 # Calculamos su diámetro y su centroide
-d = diametro(x,y,z,10)
+d = diametro(np.array(list(zip(x.ravel(),y.ravel()))))
 c = centroide(x,y,z)
 print("El centroide es", c)
 
