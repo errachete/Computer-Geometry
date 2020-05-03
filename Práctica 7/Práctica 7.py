@@ -101,7 +101,7 @@ plt.figure(figsize=(10,10))
 ax = plt.axes(projection='3d')
 ax.plot_surface(x,y,z,cmap=plt.cm.get_cmap('viridis'))
 plt.title('Figura utilizada en el ejercicio 1')
-plt.savefig('fig.png')
+plt.savefig('fig1.png')
 plt.show()
 
 # Calculamos su diámetro y su centroide
@@ -136,7 +136,7 @@ plt.figure(figsize=(10,10))
 ax = plt.axes(projection='3d')
 ax.scatter(x,y,z,c=col,s=1,marker='.')
 plt.title('Figura utilizada en el ejercicio 2')
-plt.savefig('fig.png')
+plt.savefig('fig2.png')
 plt.show()
 
 # Calculamos su diámetro y su centroide
